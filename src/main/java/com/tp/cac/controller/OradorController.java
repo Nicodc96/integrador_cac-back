@@ -18,6 +18,57 @@ public class OradorController {
     @Autowired
     private IOradorService oradorService;
 
+    @GetMapping("")
+    public ResponseEntity<?> index(){
+        return new ResponseEntity<>(MessageResponse.builder()
+                .mensaje("API Rest Java w/ Spring Framework - Grupo 2 CaC Java")
+                .listaObjetos(new ArrayList<>())
+                .build(), HttpStatus.OK);
+    }
+
+    @GetMapping("orador/{id}")
+    public ResponseEntity<?> showById(@PathVariable Integer id){
+        Orador orador = oradorService.findById(id);
+        ArrayList<OradorDto> listReturn = new ArrayList<>();
+
+        if(orador == null){
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .mensaje("No se ha encontrado el registro solicitado.")
+                    .listaObjetos(new ArrayList<>())
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+        listReturn.add(OradorDto.builder()
+                .id_orador(orador.getId_orador())
+                .nombre(orador.getNombre())
+                .apellido(orador.getApellido())
+                .email(orador.getEmail())
+                .tema(orador.getTema())
+                .fecha_alta(orador.getFecha_alta())
+                .build());
+        return new ResponseEntity<>(MessageResponse.builder()
+                .mensaje("Mostrando información para ID: " + orador.getId_orador())
+                .listaObjetos(listReturn)
+                .build()
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("oradores")
+    public ResponseEntity<?> showAll(){
+        try{
+            ArrayList<OradorDto> listReturn = oradorService.findAll();
+
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .mensaje("Registros de oradores")
+                    .listaObjetos(listReturn)
+                    .build(), HttpStatus.OK);
+        } catch (DataAccessException dataAccessException){
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .mensaje("Ha ocurrido un error: " + dataAccessException.getMessage())
+                    .listaObjetos(new ArrayList<>())
+                    .build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("orador")
     public ResponseEntity<?> create(@RequestBody OradorDto oradorDto){
         Orador oradorSave = null;
@@ -78,49 +129,6 @@ public class OradorController {
         }catch(DataAccessException dataAccessException){
             return new ResponseEntity<>(MessageResponse.builder()
                     .mensaje(dataAccessException.getMessage())
-                    .listaObjetos(new ArrayList<>())
-                    .build(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("orador/{id}")
-    public ResponseEntity<?> showById(@PathVariable Integer id){
-        Orador orador = oradorService.findById(id);
-        ArrayList<OradorDto> listReturn = new ArrayList<>();
-
-        if(orador == null){
-            return new ResponseEntity<>(MessageResponse.builder()
-                    .mensaje("No se ha encontrado el registro solicitado.")
-                    .listaObjetos(new ArrayList<>())
-                    .build(), HttpStatus.NOT_FOUND);
-        }
-        listReturn.add(OradorDto.builder()
-                .id_orador(orador.getId_orador())
-                .nombre(orador.getNombre())
-                .apellido(orador.getApellido())
-                .email(orador.getEmail())
-                .tema(orador.getTema())
-                .fecha_alta(orador.getFecha_alta())
-                .build());
-        return new ResponseEntity<>(MessageResponse.builder()
-                .mensaje("Mostrando información para ID: " + orador.getId_orador())
-                .listaObjetos(listReturn)
-                .build()
-                , HttpStatus.OK);
-    }
-
-    @GetMapping("oradores")
-    public ResponseEntity<?> showAll(){
-        try{
-            ArrayList<OradorDto> listReturn = oradorService.findAll();
-
-            return new ResponseEntity<>(MessageResponse.builder()
-                    .mensaje("Registros de oradores")
-                    .listaObjetos(listReturn)
-                    .build(), HttpStatus.OK);
-        } catch (DataAccessException dataAccessException){
-            return new ResponseEntity<>(MessageResponse.builder()
-                    .mensaje("Ha ocurrido un error: " + dataAccessException.getMessage())
                     .listaObjetos(new ArrayList<>())
                     .build(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
