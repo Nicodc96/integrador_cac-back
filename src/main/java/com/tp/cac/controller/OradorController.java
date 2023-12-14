@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/v1/")
-@CrossOrigin(origins = {"http://127.0.0.1:5500", "https://integrador-cac-front.vercel.app/"})
+@CrossOrigin(origins = "*")
 public class OradorController {
     @Autowired
     private IOradorService oradorService;
