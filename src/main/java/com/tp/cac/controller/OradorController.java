@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -81,7 +83,7 @@ public class OradorController {
                     .apellido(oradorSave.getApellido())
                     .email(oradorSave.getEmail())
                     .tema(oradorSave.getTema())
-                    .fecha_alta(oradorSave.getFecha_alta())
+                    .fecha_alta(new Timestamp(new Date().getTime()))
                     .build();
 
             ArrayList<OradorDto> listReturn = new ArrayList<>();
