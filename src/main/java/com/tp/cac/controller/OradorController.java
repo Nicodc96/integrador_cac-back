@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/v1/")
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "https://integrador-cac-front.vercel.app/"})
 public class OradorController {
     @Autowired
     private IOradorService oradorService;
@@ -26,6 +27,7 @@ public class OradorController {
                 .build(), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping("orador/{id}")
     public ResponseEntity<?> showById(@PathVariable Integer id){
         Orador orador = oradorService.findById(id);
@@ -52,6 +54,7 @@ public class OradorController {
                 , HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping("oradores")
     public ResponseEntity<?> showAll(){
         try{
@@ -69,6 +72,7 @@ public class OradorController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("orador")
     public ResponseEntity<?> create(@RequestBody OradorDto oradorDto){
         Orador oradorSave = null;
@@ -97,6 +101,7 @@ public class OradorController {
         }
     }
 
+    @CrossOrigin
     @PutMapping("orador/{id}")
     public ResponseEntity<?> update(@RequestBody OradorDto oradorDto, @PathVariable Integer id){
         Orador oradorUpdate = null;
